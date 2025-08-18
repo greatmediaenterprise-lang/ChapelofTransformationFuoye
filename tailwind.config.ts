@@ -18,6 +18,10 @@ export default {
 			}
 		},
 		extend: {
+			fontFamily: {
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+				serif: ['Playfair Display', 'Georgia', 'serif'],
+			},
 			colors: {
 				border: 'hsl(var(--border))',
 				input: 'hsl(var(--input))',
@@ -61,6 +65,13 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
+				},
+				// Church theme colors
+				church: {
+					gold: 'hsl(var(--church-gold))',
+					blue: 'hsl(var(--church-deep-blue))',
+					'light-blue': 'hsl(var(--church-light-blue))',
+					cream: 'hsl(var(--church-cream))'
 				}
 			},
 			borderRadius: {

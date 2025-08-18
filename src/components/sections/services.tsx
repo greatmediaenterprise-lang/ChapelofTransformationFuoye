@@ -14,7 +14,7 @@ const Services = () => {
     {
       icon: Clock,
       title: "Service Time",
-      details: "9:00 AM - 11:30 AM",
+      details: "8:00 AM - 11:30 AM",
       description: "Experience transformation through worship"
     },
     {

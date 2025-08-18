@@ -35,7 +35,7 @@ const Contact = () => {
     {
       icon: Clock,
       title: "Service Time",
-      details: "Sunday 9:00 AM - 11:30 AM",
+      details: "Sunday 8:00 AM - 11:30 AM",
       subtitle: "All are welcome to join"
     },
     {
@@ -46,9 +46,9 @@ const Contact = () => {
     },
     {
       icon: Phone,
-      title: "Connect",
-      details: "Social Media",
-      subtitle: "Follow us for updates"
+      title: "Phone",
+      details: "08082513103, 08118361206",
+      subtitle: "07041128142"
     }
   ];
 
@@ -111,23 +111,29 @@ const Contact = () => {
                       asChild
                       className="hover:bg-primary hover:text-primary-foreground transition-divine"
                     >
-                      <a href="https://linktr.ee/cotfuoye" target="_blank" rel="noopener noreferrer">
+                      <a href="https://www.facebook.com/cotfuoye/" target="_blank" rel="noopener noreferrer">
                         <Facebook className="h-4 w-4" />
                       </a>
                     </Button>
                     <Button 
                       variant="outline" 
                       size="sm"
+                      asChild
                       className="hover:bg-primary hover:text-primary-foreground transition-divine"
                     >
-                      <Instagram className="h-4 w-4" />
+                      <a href="https://www.instagram.com/cot.fuoye/" target="_blank" rel="noopener noreferrer">
+                        <Instagram className="h-4 w-4" />
+                      </a>
                     </Button>
                     <Button 
                       variant="outline" 
                       size="sm"
+                      asChild
                       className="hover:bg-primary hover:text-primary-foreground transition-divine"
                     >
-                      <Youtube className="h-4 w-4" />
+                      <a href="https://www.youtube.com/@chapeloftransformation" target="_blank" rel="noopener noreferrer">
+                        <Youtube className="h-4 w-4" />
+                      </a>
                     </Button>
                   </div>
                 </CardContent>

@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Heart, MapPin, Clock, Mail } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Heart, MapPin, Clock, Mail, Facebook, Instagram, Youtube } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -45,7 +46,7 @@ const Footer = () => {
                 <Clock className="h-4 w-4 mt-0.5 opacity-80" />
                 <div>
                   <p>Sunday Service</p>
-                  <p className="opacity-80">9:00 AM - 11:30 AM</p>
+                  <p className="opacity-80">8:00 AM - 11:30 AM</p>
                 </div>
               </div>
               <div className="flex items-start space-x-2">
@@ -72,14 +73,39 @@ const Footer = () => {
               </div>
             </div>
             <div className="pt-4">
-              <a 
-                href="https://linktr.ee/cotfuoye" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-secondary hover:text-secondary/80 transition-divine text-sm font-medium"
-              >
-                Connect with us →
-              </a>
+              <h5 className="text-sm font-medium mb-3">Follow Us</h5>
+              <div className="flex space-x-2">
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  asChild
+                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
+                >
+                  <a href="https://www.facebook.com/cotfuoye/" target="_blank" rel="noopener noreferrer">
+                    <Facebook className="h-4 w-4" />
+                  </a>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  asChild
+                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
+                >
+                  <a href="https://www.instagram.com/cot.fuoye/" target="_blank" rel="noopener noreferrer">
+                    <Instagram className="h-4 w-4" />
+                  </a>
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  asChild
+                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
+                >
+                  <a href="https://www.youtube.com/@chapeloftransformation" target="_blank" rel="noopener noreferrer">
+                    <Youtube className="h-4 w-4" />
+                  </a>
+                </Button>
+              </div>
             </div>
           </div>
         </div>

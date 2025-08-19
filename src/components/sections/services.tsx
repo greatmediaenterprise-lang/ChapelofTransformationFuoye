@@ -18,6 +18,18 @@ const Services = () => {
       description: "Experience transformation through worship"
     },
     {
+      icon: Calendar,
+      title: "Bible Study",
+      details: "Every Wednesday",
+      description: "5:30 PM - 6:30 PM"
+    },
+    {
+      icon: Calendar,
+      title: "Prayer Meeting",
+      details: "Every Friday",
+      description: "5:30 PM - 6:30 PM"
+    },
+    {
       icon: MapPin,
       title: "Location",
       details: "Phase One, Main Auditorium",
@@ -48,7 +60,7 @@ const Services = () => {
         </div>
 
         {/* Service Information Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
           {serviceInfo.map((info, index) => (
             <Card key={index} className="group hover:shadow-divine transition-divine border-0 bg-background">
               <CardContent className="p-6 text-center">
@@ -127,23 +139,23 @@ const Services = () => {
               <h3 className="text-2xl font-serif font-semibold mb-4 text-white">
                 Ready to Join Us?
               </h3>
-              <p className="text-lg mb-6 text-white/90">
-                Worship with us @ Chapel of Transformation, Phase one, Main Auditorium.
-              </p>
-              <Button 
-                asChild
-                size="lg" 
-                variant="secondary"
-                className="bg-white text-church-gold hover:bg-white/90 transition-divine"
-              >
-                <a 
-                  href="https://linktr.ee/cotfuoye" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                >
-                  Connect With Us
-                </a>
-              </Button>
+               <p className="text-lg mb-6 text-white/90">
+                 Worship with us @ Chapel of Transformation, Phase one, Main Auditorium.
+               </p>
+               <Button 
+                 asChild
+                 size="lg" 
+                 variant="secondary"
+                 className="bg-white text-church-gold hover:bg-white/90 transition-divine"
+               >
+                 <a 
+                   href="https://linktr.ee/cotfuoye" 
+                   target="_blank" 
+                   rel="noopener noreferrer"
+                 >
+                   Join Us
+                 </a>
+               </Button>
             </CardContent>
           </Card>
         </div>

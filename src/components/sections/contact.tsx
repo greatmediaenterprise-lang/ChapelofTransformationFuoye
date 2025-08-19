@@ -199,7 +199,7 @@ const Contact = () => {
                     asChild
                     className="w-full shadow-gentle hover:shadow-divine transition-divine"
                   >
-                    <a href="https://wa.me/2348082513103" target="_blank" rel="noopener noreferrer">
+                    <a href="https://wa.me/2348118361206" target="_blank" rel="noopener noreferrer">
                       Send Message via WhatsApp
                     </a>
                   </Button>

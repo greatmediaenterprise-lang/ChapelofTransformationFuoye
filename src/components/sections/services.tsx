@@ -83,14 +83,21 @@ const Services = () => {
               
               {/* Video Preview */}
               <div className="relative mb-6">
-                <div className="aspect-video bg-church-light-blue rounded-lg flex items-center justify-center group cursor-pointer hover:bg-church-blue/10 transition-divine">
-                  <div className="text-center">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-primary text-primary-foreground rounded-full mb-4 group-hover:scale-110 transition-divine">
-                      <Play className="h-10 w-10 ml-1" />
+                <a 
+                  href="https://www.facebook.com/share/v/16jXBxWpMJ/" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="block"
+                >
+                  <div className="aspect-video bg-church-light-blue rounded-lg flex items-center justify-center group cursor-pointer hover:bg-church-blue/10 transition-divine">
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-20 h-20 bg-primary text-primary-foreground rounded-full mb-4 group-hover:scale-110 transition-divine">
+                        <Play className="h-10 w-10 ml-1" />
+                      </div>
+                      <p className="text-primary font-semibold">Watch Our Chapel Preview</p>
                     </div>
-                    <p className="text-primary font-semibold">Watch Our Chapel Preview</p>
                   </div>
-                </div>
+                </a>
               </div>
 
               <Button 

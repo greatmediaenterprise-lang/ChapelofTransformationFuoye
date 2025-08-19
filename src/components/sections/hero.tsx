@@ -56,17 +56,23 @@ const Hero = () => {
           <Button 
             size="lg" 
             variant="secondary"
+            asChild
             className="text-lg px-8 py-3 shadow-gentle hover:shadow-divine transition-divine"
           >
-            Learn More About Us
-            <ArrowRight className="ml-2 h-5 w-5" />
+            <a href="tel:08082513103">
+              Learn More About Us
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </a>
           </Button>
           <Button 
             size="lg" 
             variant="outline"
+            asChild
             className="text-lg px-8 py-3 bg-white/10 border-white/20 text-white hover:bg-white/20 transition-divine"
           >
-            Join Our Services
+            <a href="https://linktr.ee/cotfuoye" target="_blank" rel="noopener noreferrer">
+              Join Our Services
+            </a>
           </Button>
         </div>
 

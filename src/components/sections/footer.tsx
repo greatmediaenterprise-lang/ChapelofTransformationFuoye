@@ -115,7 +115,7 @@ const Footer = () => {
           <p className="text-sm opacity-80">
             © {new Date().getFullYear()} Chapel of Transformation, FUOYE. 
             <span className="inline-flex items-center ml-2">
-              Made with <Heart className="h-3 w-3 mx-1 text-secondary" /> for God's Kingdom
+              Perfecting holiness in the fear of God
             </span>
           </p>
         </div>

@@ -194,11 +194,14 @@ const Contact = () => {
                     />
                   </div>
                   <Button 
-                    type="submit" 
+                    type="button"
                     size="lg" 
+                    asChild
                     className="w-full shadow-gentle hover:shadow-divine transition-divine"
                   >
-                    Send Message
+                    <a href="https://wa.me/2348082513103" target="_blank" rel="noopener noreferrer">
+                      Send Message via WhatsApp
+                    </a>
                   </Button>
                 </form>
               </CardContent>

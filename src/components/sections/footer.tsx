@@ -11,9 +11,9 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
               <img 
-                src="/lovable-uploads/7441a481-89dd-40e5-a3f4-df2bed1faef9.png" 
+                src="/lovable-uploads/cot_logo.png" 
                 alt="Chapel of Transformation Logo" 
-                className="h-12 w-12"
+                className="h-14 w-14 object-contain"
               />
               <div>
                 <h3 className="text-xl font-serif font-semibold">

@@ -23,7 +23,7 @@ const Navigation = () => {
             <img 
               src="/lovable-uploads/cot_logo.png" 
               alt="Chapel of Transformation Logo" 
-              className="h-10 w-10 object-contain"
+              className="h-14 w-14 object-contain"
             />
             <div className="hidden sm:block">
               <h1 className="text-lg font-serif font-semibold text-primary">

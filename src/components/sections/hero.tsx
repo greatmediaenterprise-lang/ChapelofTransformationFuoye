@@ -18,9 +18,9 @@ const Hero = () => {
         {/* Chapel Logo */}
         <div className="mb-8">
           <img 
-            src="/lovable-uploads/7441a481-89dd-40e5-a3f4-df2bed1faef9.png" 
+            src="/lovable-uploads/cot_logo.png" 
             alt="Chapel of Transformation Logo" 
-            className="h-24 w-24 mx-auto mb-6 drop-shadow-lg"
+            className="h-24 w-24 mx-auto mb-6 drop-shadow-lg object-contain"
           />
         </div>
 

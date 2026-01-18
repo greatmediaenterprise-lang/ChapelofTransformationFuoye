@@ -16,11 +16,11 @@ const Hero = () => {
 
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
         {/* Chapel Logo */}
-        <div className="mb-8">
+        <div className="mb-4">
           <img 
             src="/lovable-uploads/cot_logo.png" 
             alt="Chapel of Transformation Logo" 
-            className="h-32 w-32 mx-auto mb-6 drop-shadow-lg object-contain"
+            className="h-32 w-32 mx-auto mb-2 drop-shadow-lg object-contain"
           />
         </div>
 

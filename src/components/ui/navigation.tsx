@@ -21,9 +21,9 @@ const Navigation = () => {
           {/* Logo */}
           <div className="flex items-center space-x-3">
             <img 
-              src="/lovable-uploads/7441a481-89dd-40e5-a3f4-df2bed1faef9.png" 
+              src="/lovable-uploads/cot_logo.png" 
               alt="Chapel of Transformation Logo" 
-              className="h-10 w-10"
+              className="h-10 w-10 object-contain"
             />
             <div className="hidden sm:block">
               <h1 className="text-lg font-serif font-semibold text-primary">

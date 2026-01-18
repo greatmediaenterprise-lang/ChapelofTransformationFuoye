@@ -20,7 +20,7 @@ const Hero = () => {
           <img 
             src="/lovable-uploads/cot_logo.png" 
             alt="Chapel of Transformation Logo" 
-            className="h-24 w-24 mx-auto mb-6 drop-shadow-lg object-contain"
+            className="h-32 w-32 mx-auto mb-6 drop-shadow-lg object-contain"
           />
         </div>
 

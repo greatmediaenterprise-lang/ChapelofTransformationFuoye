@@ -11,6 +11,9 @@ const Navigation = () => {
     { name: "About", href: "#about" },
     { name: "Leadership", href: "#leadership" },
     { name: "Services", href: "#services" },
+    { name: "Gallery", href: "#gallery" },
+    { name: "Resources", href: "#resources" },
+    { name: "Branches", href: "#branches" },
     { name: "Contact", href: "#contact" },
   ];
 
@@ -34,23 +37,25 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-5">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-divine"
+                className="text-xs font-medium text-foreground hover:text-primary transition-divine"
               >
                 {item.name}
               </a>
             ))}
-            <Button variant="default" size="sm" className="ml-4">
-              Join Us
+            <Button variant="default" size="sm" className="ml-2" asChild>
+              <a href="https://linktr.ee/cotfuoye" target="_blank" rel="noopener noreferrer">
+                Join Us
+              </a>
             </Button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <Button
               variant="ghost"
               size="sm"
@@ -63,8 +68,8 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t max-h-[70vh] overflow-y-auto">
               {navItems.map((item) => (
                 <a
                   key={item.name}
@@ -76,8 +81,10 @@ const Navigation = () => {
                 </a>
               ))}
               <div className="px-3 pt-2">
-                <Button variant="default" size="sm" className="w-full">
-                  Join Us
+                <Button variant="default" size="sm" className="w-full" asChild>
+                  <a href="https://linktr.ee/cotfuoye" target="_blank" rel="noopener noreferrer">
+                    Join Us
+                  </a>
                 </Button>
               </div>
             </div>

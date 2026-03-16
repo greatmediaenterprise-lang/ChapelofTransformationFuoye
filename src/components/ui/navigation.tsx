@@ -68,8 +68,8 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t">
+          <div className="lg:hidden">
+            <div className="px-2 pt-2 pb-3 space-y-1 bg-background border-t max-h-[70vh] overflow-y-auto">
               {navItems.map((item) => (
                 <a
                   key={item.name}
@@ -81,8 +81,10 @@ const Navigation = () => {
                 </a>
               ))}
               <div className="px-3 pt-2">
-                <Button variant="default" size="sm" className="w-full">
-                  Join Us
+                <Button variant="default" size="sm" className="w-full" asChild>
+                  <a href="https://linktr.ee/cotfuoye" target="_blank" rel="noopener noreferrer">
+                    Join Us
+                  </a>
                 </Button>
               </div>
             </div>

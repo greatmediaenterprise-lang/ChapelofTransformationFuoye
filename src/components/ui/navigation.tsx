@@ -37,18 +37,20 @@ const Navigation = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-5">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className="text-sm font-medium text-foreground hover:text-primary transition-divine"
+                className="text-xs font-medium text-foreground hover:text-primary transition-divine"
               >
                 {item.name}
               </a>
             ))}
-            <Button variant="default" size="sm" className="ml-4">
-              Join Us
+            <Button variant="default" size="sm" className="ml-2" asChild>
+              <a href="https://linktr.ee/cotfuoye" target="_blank" rel="noopener noreferrer">
+                Join Us
+              </a>
             </Button>
           </div>
 

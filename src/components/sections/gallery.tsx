@@ -1,10 +1,9 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Camera, Upload, X, Loader2 } from "lucide-react";
+import { Camera, X, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
 
 interface GalleryImage {
   id: string;
@@ -17,9 +16,7 @@ interface GalleryImage {
 const Gallery = () => {
   const [images, setImages] = useState<GalleryImage[]>([]);
   const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
-  const { toast } = useToast();
 
   useEffect(() => {
     fetchImages();
@@ -35,55 +32,11 @@ const Gallery = () => {
     setLoading(false);
   };
 
-  const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Validate file type and size
-    const allowedTypes = ["image/jpeg", "image/png", "image/webp", "image/gif"];
-    if (!allowedTypes.includes(file.type)) {
-      toast({ title: "Invalid file type", description: "Please upload JPG, PNG, WebP, or GIF images only.", variant: "destructive" });
-      return;
-    }
-    if (file.size > 5 * 1024 * 1024) {
-      toast({ title: "File too large", description: "Maximum file size is 5MB.", variant: "destructive" });
-      return;
-    }
-
-    setUploading(true);
-    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, '_')}`;
-
-    const { error: uploadError } = await supabase.storage
-      .from("gallery")
-      .upload(fileName, file);
-
-    if (uploadError) {
-      toast({ title: "Upload failed", description: "Please sign in to upload images.", variant: "destructive" });
-      setUploading(false);
-      return;
-    }
-
-    const { data: urlData } = supabase.storage.from("gallery").getPublicUrl(fileName);
-
-    const title = file.name.replace(/\.[^/.]+$/, "").substring(0, 100);
-    await supabase.from("gallery_images").insert({
-      title,
-      image_url: urlData.publicUrl,
-    });
-
-    toast({ title: "Image uploaded!", description: "Your photo has been added to the gallery." });
-    fetchImages();
-    setUploading(false);
-  };
-
   return (
     <section id="gallery" className="py-20 bg-background">
       <div className="container mx-auto px-4">
-        {/* Section Header */}
         <div className="text-center mb-12">
-          <Badge variant="secondary" className="mb-4">
-            Gallery
-          </Badge>
+          <Badge variant="secondary" className="mb-4">Gallery</Badge>
           <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6">
             Our Gallery
           </h2>
@@ -92,28 +45,6 @@ const Gallery = () => {
           </p>
         </div>
 
-        {/* Upload Button */}
-        <div className="text-center mb-8">
-          <label htmlFor="gallery-upload">
-            <Button asChild variant="default" disabled={uploading} className="cursor-pointer">
-              <span>
-                {uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
-                {uploading ? "Uploading..." : "Upload Photo"}
-              </span>
-            </Button>
-          </label>
-          <input
-            id="gallery-upload"
-            type="file"
-            accept="image/jpeg,image/png,image/webp,image/gif"
-            className="hidden"
-            onChange={handleUpload}
-            disabled={uploading}
-          />
-          <p className="text-xs text-muted-foreground mt-2">Sign in to upload photos (max 5MB)</p>
-        </div>
-
-        {/* Gallery Grid */}
         {loading ? (
           <div className="text-center py-12">
             <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
@@ -121,7 +52,7 @@ const Gallery = () => {
         ) : images.length === 0 ? (
           <div className="text-center py-16">
             <Camera className="h-16 w-16 mx-auto text-muted-foreground/40 mb-4" />
-            <p className="text-muted-foreground text-lg">No photos yet. Be the first to share!</p>
+            <p className="text-muted-foreground text-lg">Photos coming soon!</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4">
@@ -146,7 +77,6 @@ const Gallery = () => {
           </div>
         )}
 
-        {/* Lightbox */}
         {selectedImage && (
           <div
             className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4"

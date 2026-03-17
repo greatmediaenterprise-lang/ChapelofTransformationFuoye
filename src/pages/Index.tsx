@@ -5,6 +5,7 @@ import Leadership from "@/components/sections/leadership";
 import Services from "@/components/sections/services";
 import Gallery from "@/components/sections/gallery";
 import Resources from "@/components/sections/resources";
+import Events from "@/components/sections/events";
 import Branches from "@/components/sections/branches";
 import SocialChannels from "@/components/sections/social-channels";
 import Contact from "@/components/sections/contact";
@@ -23,6 +24,7 @@ const Index = () => {
         <Resources />
         <Branches />
         <SocialChannels />
+        <Events />
         <Contact />
       </main>
       <Footer />

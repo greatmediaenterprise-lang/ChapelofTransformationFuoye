@@ -6,71 +6,40 @@ import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
+import { useSiteContent } from "@/hooks/use-site-content";
 
 const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: ""
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const { toast } = useToast();
+  const { get } = useSiteContent();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would integrate with your backend/Supabase
-    toast({
-      title: "Message Sent!",
-      description: "Thank you for reaching out. We'll get back to you soon.",
-    });
+    toast({ title: "Message Sent!", description: "Thank you for reaching out." });
     setFormData({ name: "", email: "", message: "" });
   };
 
   const contactInfo = [
-    {
-      icon: MapPin,
-      title: "Location",
-      details: "Phase One, Main Auditorium",
-      subtitle: "Federal University Oye Ekiti"
-    },
-    {
-      icon: Clock,
-      title: "Service Time",
-      details: "Sunday 8:00 AM - 11:30 AM",
-      subtitle: "All are welcome to join"
-    },
-    {
-      icon: Mail,
-      title: "Email",
-      details: "info@cotfuoye.org",
-      subtitle: "Get in touch with us"
-    },
-    {
-      icon: Phone,
-      title: "Phone",
-      details: "08082513103, 08118361206",
-      subtitle: "07041128142"
-    }
+    { icon: MapPin, title: "Location", details: get("contact", "location", "Phase One, Main Auditorium"), subtitle: get("contact", "location_subtitle", "Federal University Oye Ekiti") },
+    { icon: Clock, title: "Service Time", details: "Sunday 8:00 AM - 11:30 AM", subtitle: "All are welcome to join" },
+    { icon: Mail, title: "Email", details: get("contact", "email", "info@cotfuoye.org"), subtitle: "Get in touch with us" },
+    { icon: Phone, title: "Phone", details: get("contact", "phone", "08082513103, 08118361206"), subtitle: get("contact", "phone_2", "07041128142") },
   ];
+
+  const whatsapp = get("contact", "whatsapp", "2348118361206");
 
   return (
     <section id="contact" className="py-20 bg-church-light-blue">
       <div className="container mx-auto px-4">
-        {/* Section Header */}
         <div className="text-center mb-16">
-          <Badge variant="secondary" className="mb-4">
-            Contact Us
-          </Badge>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6">
-            Get In Touch
-          </h2>
+          <Badge variant="secondary" className="mb-4">Contact Us</Badge>
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-primary mb-6">Get In Touch</h2>
           <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto leading-relaxed">
-            We'd love to hear from you. Reach out to us for prayer requests, questions, 
-            or to learn more about joining our chapel family.
+            We'd love to hear from you. Reach out to us for prayer requests, questions, or to learn more about joining our chapel family.
           </p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Contact Information */}
           <div className="lg:col-span-1">
             <div className="space-y-6">
               {contactInfo.map((info, index) => (
@@ -83,57 +52,27 @@ const Contact = () => {
                         </div>
                       </div>
                       <div>
-                        <h4 className="text-lg font-serif font-semibold text-primary mb-1">
-                          {info.title}
-                        </h4>
-                        <p className="text-foreground font-medium">
-                          {info.details}
-                        </p>
-                        <p className="text-sm text-muted-foreground">
-                          {info.subtitle}
-                        </p>
+                        <h4 className="text-lg font-serif font-semibold text-primary mb-1">{info.title}</h4>
+                        <p className="text-foreground font-medium">{info.details}</p>
+                        <p className="text-sm text-muted-foreground">{info.subtitle}</p>
                       </div>
                     </div>
                   </CardContent>
                 </Card>
               ))}
 
-              {/* Social Media Links */}
               <Card className="shadow-gentle border-0 bg-background">
                 <CardContent className="p-6">
-                  <h4 className="text-lg font-serif font-semibold text-primary mb-4">
-                    Follow Us
-                  </h4>
+                  <h4 className="text-lg font-serif font-semibold text-primary mb-4">Follow Us</h4>
                   <div className="flex space-x-4">
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      asChild
-                      className="hover:bg-primary hover:text-primary-foreground transition-divine"
-                    >
-                      <a href="https://www.facebook.com/cotfuoye/" target="_blank" rel="noopener noreferrer">
-                        <Facebook className="h-4 w-4" />
-                      </a>
+                    <Button variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
+                      <a href="https://www.facebook.com/cotfuoye/" target="_blank" rel="noopener noreferrer"><Facebook className="h-4 w-4" /></a>
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      asChild
-                      className="hover:bg-primary hover:text-primary-foreground transition-divine"
-                    >
-                      <a href="https://www.instagram.com/cot.fuoye/" target="_blank" rel="noopener noreferrer">
-                        <Instagram className="h-4 w-4" />
-                      </a>
+                    <Button variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
+                      <a href="https://www.instagram.com/cot.fuoye/" target="_blank" rel="noopener noreferrer"><Instagram className="h-4 w-4" /></a>
                     </Button>
-                    <Button 
-                      variant="outline" 
-                      size="sm"
-                      asChild
-                      className="hover:bg-primary hover:text-primary-foreground transition-divine"
-                    >
-                      <a href="https://www.youtube.com/@chapeloftransformation" target="_blank" rel="noopener noreferrer">
-                        <Youtube className="h-4 w-4" />
-                      </a>
+                    <Button variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
+                      <a href="https://www.youtube.com/@chapeloftransformation" target="_blank" rel="noopener noreferrer"><Youtube className="h-4 w-4" /></a>
                     </Button>
                   </div>
                 </CardContent>
@@ -141,67 +80,27 @@ const Contact = () => {
             </div>
           </div>
 
-          {/* Contact Form */}
           <div className="lg:col-span-2">
             <Card className="shadow-divine border-0 bg-background">
               <CardContent className="p-8">
-                <h3 className="text-2xl font-serif font-semibold text-primary mb-6">
-                  Send Us a Message
-                </h3>
+                <h3 className="text-2xl font-serif font-semibold text-primary mb-6">Send Us a Message</h3>
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">
-                        Full Name
-                      </label>
-                      <Input
-                        id="name"
-                        type="text"
-                        placeholder="Your full name"
-                        value={formData.name}
-                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        required
-                        className="transition-divine"
-                      />
+                      <label htmlFor="name" className="block text-sm font-medium text-foreground mb-2">Full Name</label>
+                      <Input id="name" type="text" placeholder="Your full name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required className="transition-divine" />
                     </div>
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">
-                        Email Address
-                      </label>
-                      <Input
-                        id="email"
-                        type="email"
-                        placeholder="your.email@example.com"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        required
-                        className="transition-divine"
-                      />
+                      <label htmlFor="email" className="block text-sm font-medium text-foreground mb-2">Email Address</label>
+                      <Input id="email" type="email" placeholder="your.email@example.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required className="transition-divine" />
                     </div>
                   </div>
                   <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">
-                      Message
-                    </label>
-                    <Textarea
-                      id="message"
-                      placeholder="How can we help you? Share your prayer requests, questions, or thoughts..."
-                      rows={6}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      required
-                      className="transition-divine"
-                    />
+                    <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">Message</label>
+                    <Textarea id="message" placeholder="How can we help you?" rows={6} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} required className="transition-divine" />
                   </div>
-                  <Button 
-                    type="button"
-                    size="lg" 
-                    asChild
-                    className="w-full shadow-gentle hover:shadow-divine transition-divine"
-                  >
-                    <a href="https://wa.me/2348118361206" target="_blank" rel="noopener noreferrer">
-                      Send Message via WhatsApp
-                    </a>
+                  <Button type="button" size="lg" asChild className="w-full shadow-gentle hover:shadow-divine transition-divine">
+                    <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer">Send Message via WhatsApp</a>
                   </Button>
                 </form>
               </CardContent>

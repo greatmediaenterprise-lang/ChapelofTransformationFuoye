@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      branches: {
+        Row: {
+          created_at: string
+          display_order: number | null
+          id: string
+          is_main: boolean | null
+          location: string
+          name: string
+          phone: string | null
+          service_time: string | null
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_main?: boolean | null
+          location: string
+          name: string
+          phone?: string | null
+          service_time?: string | null
+        }
+        Update: {
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_main?: boolean | null
+          location?: string
+          name?: string
+          phone?: string | null
+          service_time?: string | null
+        }
+        Relationships: []
+      }
       cart: {
         Row: {
           created_at: string
@@ -92,6 +125,36 @@ export type Database = {
           id?: string
           image_url?: string
           title?: string
+        }
+        Relationships: []
+      }
+      leaders: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          image_url: string | null
+          name: string
+          position: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name: string
+          position: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          position?: string
         }
         Relationships: []
       }
@@ -188,6 +251,87 @@ export type Database = {
           phone?: string | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      service_times: {
+        Row: {
+          created_at: string
+          day: string
+          description: string | null
+          display_order: number | null
+          id: string
+          time: string
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          day: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          time: string
+          title: string
+        }
+        Update: {
+          created_at?: string
+          day?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          time?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      site_content: {
+        Row: {
+          id: string
+          key: string
+          section: string
+          updated_at: string
+          value: string
+        }
+        Insert: {
+          id?: string
+          key: string
+          section: string
+          updated_at?: string
+          value?: string
+        }
+        Update: {
+          id?: string
+          key?: string
+          section?: string
+          updated_at?: string
+          value?: string
+        }
+        Relationships: []
+      }
+      social_links: {
+        Row: {
+          created_at: string
+          description: string | null
+          display_order: number | null
+          id: string
+          platform: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          platform: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          display_order?: number | null
+          id?: string
+          platform?: string
+          url?: string
         }
         Relationships: []
       }

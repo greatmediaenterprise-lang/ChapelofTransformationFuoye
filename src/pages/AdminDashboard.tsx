@@ -145,7 +145,7 @@ const SiteTextTab = () => {
     setSaving(null);
   };
 
-  const grouped = items.reduce((acc: Record<string, any[]>, item) => {
+  const grouped = items.reduce<Record<string, any[]>>((acc, item) => {
     if (!acc[item.section]) acc[item.section] = [];
     acc[item.section].push(item);
     return acc;

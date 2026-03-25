@@ -6,7 +6,7 @@ const Hero = () => {
   const { get } = useSiteContent();
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-0">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-0">
       <div className="absolute inset-0 hero-gradient"></div>
       <div className="absolute inset-0 opacity-10">
         <div className="w-full h-full bg-white/5" style={{
@@ -16,7 +16,7 @@ const Hero = () => {
 
       <div className="relative z-10 container mx-auto px-4 text-center text-white">
         <div className="mb-4">
-          <img src="/lovable-uploads/cot_logo.png" alt="Chapel of Transformation Logo" className="h-32 w-32 mx-auto mb-2 drop-shadow-lg object-contain" />
+          <img src="/lovable-uploads/cot_logo.png" alt="Chapel of Transformation Logo" className="h-24 w-24 md:h-32 md:w-32 mx-auto mb-2 drop-shadow-lg object-contain" />
         </div>
 
         <h1 className="text-4xl md:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight">

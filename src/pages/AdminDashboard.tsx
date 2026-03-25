@@ -97,7 +97,7 @@ const AdminDashboard = () => {
             <h1 className="font-serif font-bold text-primary text-lg">Admin Dashboard</h1>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => navigate("/")}>View Site</Button>
+            <Button variant="ghost" size="sm" asChild><a href="/" target="_blank" rel="noopener noreferrer">View Site</a></Button>
             <Button variant="outline" size="sm" onClick={handleLogout}><LogOut className="h-4 w-4 mr-1" /> Logout</Button>
           </div>
         </div>

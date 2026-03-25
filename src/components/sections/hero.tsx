@@ -6,7 +6,7 @@ const Hero = () => {
   const { get } = useSiteContent();
 
   return (
-    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-0">
+    <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden pt-24 md:pt-24 lg:pt-0">
       <div className="absolute inset-0 hero-gradient"></div>
       <div className="absolute inset-0 opacity-10">
         <div className="w-full h-full bg-white/5" style={{

@@ -356,16 +356,29 @@ const GalleryTab = () => {
   };
 
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
     setUploading(true);
-    const fileName = `${Date.now()}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
-    const { error } = await supabase.storage.from("gallery").upload(fileName, file);
-    if (error) { toast({ title: "Upload failed", description: error.message, variant: "destructive" }); setUploading(false); return; }
-    const { data: urlData } = supabase.storage.from("gallery").getPublicUrl(fileName);
-    await supabase.from("gallery_images").insert({ title: file.name.replace(/\.[^/.]+$/, "").substring(0, 100), image_url: urlData.publicUrl });
-    toast({ title: "Image uploaded!" });
-    fetchImages();
+    let successCount = 0;
+    let failCount = 0;
+    const errors: string[] = [];
+
+    for (const file of files) {
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}-${file.name.replace(/[^a-zA-Z0-9.-]/g, "_")}`;
+      const { error: upErr } = await supabase.storage.from("gallery").upload(fileName, file);
+      if (upErr) { failCount++; errors.push(`${file.name}: ${upErr.message}`); continue; }
+      const { data: urlData } = supabase.storage.from("gallery").getPublicUrl(fileName);
+      const { error: insErr } = await supabase.from("gallery_images").insert({
+        title: file.name.replace(/\.[^/.]+$/, "").substring(0, 100),
+        image_url: urlData.publicUrl,
+      });
+      if (insErr) { failCount++; errors.push(`${file.name}: ${insErr.message}`); continue; }
+      successCount++;
+    }
+
+    if (successCount > 0) toast({ title: `${successCount} image${successCount > 1 ? "s" : ""} uploaded!` });
+    if (failCount > 0) toast({ title: `${failCount} failed`, description: errors.join("; ").slice(0, 300), variant: "destructive" });
+    await fetchImages();
     setUploading(false);
     e.target.value = "";
   };
@@ -379,16 +392,17 @@ const GalleryTab = () => {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader><CardTitle className="text-base">Upload Gallery Photo</CardTitle></CardHeader>
+        <CardHeader><CardTitle className="text-base">Upload Gallery Photos</CardTitle></CardHeader>
         <CardContent>
           <label htmlFor="admin-gallery-upload">
             <Button asChild variant="default" disabled={uploading} className="cursor-pointer">
-              <span>{uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}{uploading ? "Uploading..." : "Upload Photo"}</span>
+              <span>{uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}{uploading ? "Uploading..." : "Upload Photos (select multiple)"}</span>
             </Button>
           </label>
-          <input id="admin-gallery-upload" type="file" accept="image/*" className="hidden" onChange={handleUpload} disabled={uploading} />
+          <input id="admin-gallery-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
         </CardContent>
       </Card>
+
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
         {images.map((img) => (
           <Card key={img.id} className="overflow-hidden">

@@ -1,8 +1,39 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Heart, MapPin, Clock, Mail, Facebook, Instagram, Youtube } from "lucide-react";
+import { MapPin, Clock, Mail, Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
+import { supabase } from "@/integrations/supabase/client";
+import { useSiteContent } from "@/hooks/use-site-content";
+
+const iconMap: Record<string, any> = {
+  Facebook,
+  YouTube: Youtube,
+  Instagram,
+  Linktree: ExternalLink,
+};
 
 const Footer = () => {
+  const { get } = useSiteContent();
+  const [leaders, setLeaders] = useState<any[]>([]);
+  const [socials, setSocials] = useState<any[]>([]);
+  const [mainBranch, setMainBranch] = useState<any>(null);
+
+  useEffect(() => {
+    supabase.from("leaders").select("name, position").order("display_order").then(({ data }) => {
+      if (data) setLeaders(data);
+    });
+    supabase.from("social_links").select("*").order("display_order").then(({ data }) => {
+      if (data) setSocials(data);
+    });
+    supabase.from("branches").select("*").order("display_order").then(({ data }) => {
+      if (data && data.length > 0) setMainBranch(data.find((b: any) => b.is_main) || data[0]);
+    });
+  }, []);
+
+  const location = mainBranch?.location || get("contact", "location", "Phase One, Main Auditorium");
+  const serviceTime = mainBranch?.service_time || "Sunday: 8:00 AM - 11:30 AM";
+  const email = get("contact", "email", "info@cotfuoye.org");
+
   return (
     <footer className="bg-primary text-primary-foreground">
       <div className="container mx-auto px-4 py-12">
@@ -10,25 +41,20 @@ const Footer = () => {
           {/* Chapel Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-3">
-              <img 
-                src="/lovable-uploads/cot_logo.png" 
-                alt="Chapel of Transformation Logo" 
+              <img
+                src="/lovable-uploads/cot_logo.png"
+                alt="Chapel of Transformation Logo"
                 className="h-14 w-14 object-contain"
               />
               <div>
-                <h3 className="text-xl font-serif font-semibold">
-                  Chapel of Transformation
-                </h3>
+                <h3 className="text-xl font-serif font-semibold">Chapel of Transformation</h3>
                 <p className="text-sm opacity-80">FUOYE</p>
               </div>
             </div>
             <p className="text-sm leading-relaxed opacity-90">
-              An interdenominational Christian body at Federal University Oye Ekiti, 
-              dedicated to the propagation of the kingdom and perfecting holiness in the fear of God.
+              {get("about", "description", "An interdenominational Christian body at Federal University Oye Ekiti, dedicated to the propagation of the kingdom and perfecting holiness in the fear of God.")}
             </p>
-            <Badge variant="secondary" className="text-xs">
-              Serving since 2012
-            </Badge>
+            <Badge variant="secondary" className="text-xs">Serving since 2012</Badge>
           </div>
 
           {/* Quick Info */}
@@ -37,24 +63,15 @@ const Footer = () => {
             <div className="space-y-3 text-sm">
               <div className="flex items-start space-x-2">
                 <MapPin className="h-4 w-4 mt-0.5 opacity-80" />
-                <div>
-                  <p>Phase One, Main Auditorium</p>
-                  <p className="opacity-80">Federal University Oye Ekiti</p>
-                </div>
+                <div><p>{location}</p></div>
               </div>
               <div className="flex items-start space-x-2">
                 <Clock className="h-4 w-4 mt-0.5 opacity-80" />
-                <div>
-                  <p>Sunday Service</p>
-                  <p className="opacity-80">8:00 AM - 11:30 AM</p>
-                </div>
+                <div><p>{serviceTime}</p></div>
               </div>
               <div className="flex items-start space-x-2">
                 <Mail className="h-4 w-4 mt-0.5 opacity-80" />
-                <div>
-                  <p>info@cotfuoye.org</p>
-                  <p className="opacity-80">Get in touch</p>
-                </div>
+                <div><p>{email}</p></div>
               </div>
             </div>
           </div>
@@ -63,60 +80,47 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="text-lg font-serif font-semibold">Leadership</h4>
             <div className="space-y-3 text-sm">
-              <div>
-                <p className="font-medium">Daddy Agu</p>
-                <p className="opacity-80">Council</p>
-              </div>
-              <div>
-                <p className="font-medium">Daddy Osamaka</p>
-                <p className="opacity-80">Chaplain</p>
-              </div>
+              {leaders.length === 0 ? (
+                <p className="opacity-70 text-xs">No leaders added yet</p>
+              ) : (
+                leaders.map((l, i) => (
+                  <div key={i}>
+                    <p className="font-medium">{l.name}</p>
+                    <p className="opacity-80">{l.position}</p>
+                  </div>
+                ))
+              )}
             </div>
-            <div className="pt-4">
-              <h5 className="text-sm font-medium mb-3">Follow Us</h5>
-              <div className="flex space-x-2">
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  asChild
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
-                >
-                  <a href="https://www.facebook.com/cotfuoye/" target="_blank" rel="noopener noreferrer">
-                    <Facebook className="h-4 w-4" />
-                  </a>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  asChild
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
-                >
-                  <a href="https://www.instagram.com/cot.fuoye/" target="_blank" rel="noopener noreferrer">
-                    <Instagram className="h-4 w-4" />
-                  </a>
-                </Button>
-                <Button 
-                  variant="outline" 
-                  size="sm"
-                  asChild
-                  className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
-                >
-                  <a href="https://www.youtube.com/@chapeloftransformation" target="_blank" rel="noopener noreferrer">
-                    <Youtube className="h-4 w-4" />
-                  </a>
-                </Button>
+            {socials.length > 0 && (
+              <div className="pt-4">
+                <h5 className="text-sm font-medium mb-3">Follow Us</h5>
+                <div className="flex space-x-2 flex-wrap gap-y-2">
+                  {socials.map((s) => {
+                    const Icon = iconMap[s.platform] || ExternalLink;
+                    return (
+                      <Button
+                        key={s.id}
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="bg-primary-foreground/10 border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground hover:text-primary transition-divine"
+                      >
+                        <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.platform}>
+                          <Icon className="h-4 w-4" />
+                        </a>
+                      </Button>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 
-        {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 mt-8 pt-8 text-center">
           <p className="text-sm opacity-80">
-            © {new Date().getFullYear()} Chapel of Transformation, FUOYE. 
-            <span className="inline-flex items-center ml-2">
-              Perfecting holiness in the fear of God
-            </span>
+            © {new Date().getFullYear()} Chapel of Transformation, FUOYE.
+            <span className="inline-flex items-center ml-2">Perfecting holiness in the fear of God</span>
           </p>
         </div>
       </div>

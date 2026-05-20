@@ -3,15 +3,29 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube } from "lucide-react";
-import { useState } from "react";
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSiteContent } from "@/hooks/use-site-content";
+import { supabase } from "@/integrations/supabase/client";
+
+const socialIconMap: Record<string, any> = { Facebook, Instagram, YouTube: Youtube, Linktree: ExternalLink };
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const { toast } = useToast();
   const { get } = useSiteContent();
+  const [firstService, setFirstService] = useState<any>(null);
+  const [socials, setSocials] = useState<any[]>([]);
+
+  useEffect(() => {
+    supabase.from("service_times").select("*").order("display_order").limit(1).then(({ data }) => {
+      if (data && data[0]) setFirstService(data[0]);
+    });
+    supabase.from("social_links").select("*").order("display_order").then(({ data }) => {
+      if (data) setSocials(data);
+    });
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +35,7 @@ const Contact = () => {
 
   const contactInfo = [
     { icon: MapPin, title: "Location", details: get("contact", "location", "Phase One, Main Auditorium"), subtitle: get("contact", "location_subtitle", "Federal University Oye Ekiti") },
-    { icon: Clock, title: "Service Time", details: "Sunday 8:00 AM - 11:30 AM", subtitle: "All are welcome to join" },
+    { icon: Clock, title: "Service Time", details: firstService ? `${firstService.day} ${firstService.time}` : "Sunday 8:00 AM - 11:30 AM", subtitle: firstService?.description || "All are welcome to join" },
     { icon: Mail, title: "Email", details: get("contact", "email", "info@cotfuoye.org"), subtitle: "Get in touch with us" },
     { icon: Phone, title: "Phone", details: get("contact", "phone", "08082513103, 08118361206"), subtitle: get("contact", "phone_2", "07041128142") },
   ];
@@ -64,16 +78,15 @@ const Contact = () => {
               <Card className="shadow-gentle border-0 bg-background">
                 <CardContent className="p-6">
                   <h4 className="text-lg font-serif font-semibold text-primary mb-4">Follow Us</h4>
-                  <div className="flex space-x-4">
-                    <Button variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
-                      <a href="https://www.facebook.com/cotfuoye/" target="_blank" rel="noopener noreferrer"><Facebook className="h-4 w-4" /></a>
-                    </Button>
-                    <Button variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
-                      <a href="https://www.instagram.com/cot.fuoye/" target="_blank" rel="noopener noreferrer"><Instagram className="h-4 w-4" /></a>
-                    </Button>
-                    <Button variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
-                      <a href="https://www.youtube.com/@chapeloftransformation" target="_blank" rel="noopener noreferrer"><Youtube className="h-4 w-4" /></a>
-                    </Button>
+                  <div className="flex flex-wrap gap-2">
+                    {socials.map((s) => {
+                      const Icon = socialIconMap[s.platform] || ExternalLink;
+                      return (
+                        <Button key={s.id} variant="outline" size="sm" asChild className="hover:bg-primary hover:text-primary-foreground transition-divine">
+                          <a href={s.url} target="_blank" rel="noopener noreferrer" aria-label={s.platform}><Icon className="h-4 w-4" /></a>
+                        </Button>
+                      );
+                    })}
                   </div>
                 </CardContent>
               </Card>

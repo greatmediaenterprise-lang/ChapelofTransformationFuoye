@@ -12,7 +12,7 @@ export const useLiveTable = <T = any>(table: string, orderBy?: string, ascending
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
-    let query: any = supabase.from(table).select("*");
+    let query: any = (supabase.from as any)(table).select("*");
     if (orderBy) query = query.order(orderBy, { ascending });
     const { data: rows } = await query;
     if (rows) setData(rows as T[]);
@@ -28,7 +28,7 @@ export const useLiveTable = <T = any>(table: string, orderBy?: string, ascending
 
     const channel = supabase
       .channel(`live_${table}`)
-      .on("postgres_changes", { event: "*", schema: "public", table }, () => fetchData())
+      .on("postgres_changes" as any, { event: "*", schema: "public", table }, () => fetchData())
       .subscribe();
 
     return () => {

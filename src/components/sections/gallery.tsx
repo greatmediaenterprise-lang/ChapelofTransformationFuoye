@@ -2,8 +2,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Camera, X, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useState } from "react";
+import { useLiveTable } from "@/hooks/use-live-table";
 
 interface GalleryImage {
   id: string;
@@ -14,23 +14,8 @@ interface GalleryImage {
 }
 
 const Gallery = () => {
-  const [images, setImages] = useState<GalleryImage[]>([]);
-  const [loading, setLoading] = useState(true);
+  const { data: images, loading } = useLiveTable<GalleryImage>("gallery_images", "created_at", false);
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
-
-  useEffect(() => {
-    fetchImages();
-  }, []);
-
-  const fetchImages = async () => {
-    const { data, error } = await supabase
-      .from("gallery_images")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (!error && data) setImages(data);
-    setLoading(false);
-  };
 
   return (
     <section id="gallery" className="py-20 bg-background">

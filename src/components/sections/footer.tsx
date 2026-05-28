@@ -1,9 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Mail, Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useSiteContent } from "@/hooks/use-site-content";
+import { useLiveTable } from "@/hooks/use-live-table";
 
 const iconMap: Record<string, any> = {
   Facebook,
@@ -14,21 +13,10 @@ const iconMap: Record<string, any> = {
 
 const Footer = () => {
   const { get } = useSiteContent();
-  const [leaders, setLeaders] = useState<any[]>([]);
-  const [socials, setSocials] = useState<any[]>([]);
-  const [mainBranch, setMainBranch] = useState<any>(null);
-
-  useEffect(() => {
-    supabase.from("leaders").select("name, position").order("display_order").then(({ data }) => {
-      if (data) setLeaders(data);
-    });
-    supabase.from("social_links").select("*").order("display_order").then(({ data }) => {
-      if (data) setSocials(data);
-    });
-    supabase.from("branches").select("*").order("display_order").then(({ data }) => {
-      if (data && data.length > 0) setMainBranch(data.find((b: any) => b.is_main) || data[0]);
-    });
-  }, []);
+  const { data: leaders } = useLiveTable<any>("leaders", "display_order");
+  const { data: socials } = useLiveTable<any>("social_links", "display_order");
+  const { data: branches } = useLiveTable<any>("branches", "display_order");
+  const mainBranch = branches.find((b: any) => b.is_main) || branches[0] || null;
 
   const location = mainBranch?.location || get("contact", "location", "Phase One, Main Auditorium");
   const serviceTime = mainBranch?.service_time || "Sunday: 8:00 AM - 11:30 AM";

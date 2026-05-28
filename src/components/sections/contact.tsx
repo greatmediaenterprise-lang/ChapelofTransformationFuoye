@@ -4,10 +4,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSiteContent } from "@/hooks/use-site-content";
-import { supabase } from "@/integrations/supabase/client";
+import { useLiveTable } from "@/hooks/use-live-table";
 
 const socialIconMap: Record<string, any> = { Facebook, Instagram, YouTube: Youtube, Linktree: ExternalLink };
 
@@ -15,17 +15,9 @@ const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const { toast } = useToast();
   const { get } = useSiteContent();
-  const [firstService, setFirstService] = useState<any>(null);
-  const [socials, setSocials] = useState<any[]>([]);
-
-  useEffect(() => {
-    supabase.from("service_times").select("*").order("display_order").limit(1).then(({ data }) => {
-      if (data && data[0]) setFirstService(data[0]);
-    });
-    supabase.from("social_links").select("*").order("display_order").then(({ data }) => {
-      if (data) setSocials(data);
-    });
-  }, []);
+  const { data: serviceTimes } = useLiveTable<any>("service_times", "display_order");
+  const { data: socials } = useLiveTable<any>("social_links", "display_order");
+  const firstService = serviceTimes[0] || null;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

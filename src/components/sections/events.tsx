@@ -1,8 +1,7 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { CalendarDays, MapPin, Loader2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useLiveTable } from "@/hooks/use-live-table";
 
 interface Event {
   id: string;
@@ -15,22 +14,7 @@ interface Event {
 }
 
 const Events = () => {
-  const [events, setEvents] = useState<Event[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchEvents();
-  }, []);
-
-  const fetchEvents = async () => {
-    const { data, error } = await supabase
-      .from("events")
-      .select("*")
-      .order("event_date", { ascending: true });
-
-    if (!error && data) setEvents(data);
-    setLoading(false);
-  };
+  const { data: events, loading } = useLiveTable<Event>("events", "event_date", true);
 
   return (
     <section id="events" className="py-20 bg-background">

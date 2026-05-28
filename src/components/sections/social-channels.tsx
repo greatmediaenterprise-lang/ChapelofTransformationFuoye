@@ -2,8 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useLiveTable } from "@/hooks/use-live-table";
 
 const iconMap: Record<string, any> = {
   Facebook,
@@ -19,20 +18,16 @@ const colorMap: Record<string, string> = {
   Linktree: "bg-[#43E660]",
 };
 
-const SocialChannels = () => {
-  const [channels, setChannels] = useState<any[]>([]);
+const FALLBACK_CHANNELS = [
+  { platform: "Facebook", url: "https://www.facebook.com/cotfuoye/", description: "Follow us for updates." },
+  { platform: "YouTube", url: "https://www.youtube.com/@chapeloftransformation", description: "Watch sermons." },
+  { platform: "Instagram", url: "https://www.instagram.com/cot.fuoye/", description: "See our highlights." },
+  { platform: "Linktree", url: "https://linktr.ee/cotfuoye", description: "All our links in one place." },
+];
 
-  useEffect(() => {
-    supabase.from("social_links").select("*").order("display_order").then(({ data }) => {
-      if (data && data.length > 0) setChannels(data);
-      else setChannels([
-        { platform: "Facebook", url: "https://www.facebook.com/cotfuoye/", description: "Follow us for updates." },
-        { platform: "YouTube", url: "https://www.youtube.com/@chapeloftransformation", description: "Watch sermons." },
-        { platform: "Instagram", url: "https://www.instagram.com/cot.fuoye/", description: "See our highlights." },
-        { platform: "Linktree", url: "https://linktr.ee/cotfuoye", description: "All our links in one place." },
-      ]);
-    });
-  }, []);
+const SocialChannels = () => {
+  const { data } = useLiveTable<any>("social_links", "display_order");
+  const channels = data.length > 0 ? data : FALLBACK_CHANNELS;
 
   return (
     <section id="socials" className="py-20 bg-church-light-blue">

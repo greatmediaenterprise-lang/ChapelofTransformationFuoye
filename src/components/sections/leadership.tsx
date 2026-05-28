@@ -1,20 +1,15 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useLiveTable } from "@/hooks/use-live-table";
+
+const FALLBACK_LEADERS = [
+  { name: "Daddy Agu", position: "Council", description: "Leading with wisdom and spiritual insight.", image_url: "/lovable-uploads/9e3dd2a8-3f58-4614-a163-6471441dd79c.png" },
+  { name: "Daddy Osamaka", position: "Chaplain", description: "Our beloved Chaplain shepherds the congregation.", image_url: "/lovable-uploads/57c095bd-1e50-443f-8680-f414f5cb9b9a.png" },
+];
 
 const Leadership = () => {
-  const [leaders, setLeaders] = useState<any[]>([]);
-
-  useEffect(() => {
-    supabase.from("leaders").select("*").order("display_order").then(({ data }) => {
-      if (data && data.length > 0) setLeaders(data);
-      else setLeaders([
-        { name: "Daddy Agu", position: "Council", description: "Leading with wisdom and spiritual insight.", image_url: "/lovable-uploads/9e3dd2a8-3f58-4614-a163-6471441dd79c.png" },
-        { name: "Daddy Osamaka", position: "Chaplain", description: "Our beloved Chaplain shepherds the congregation.", image_url: "/lovable-uploads/57c095bd-1e50-443f-8680-f414f5cb9b9a.png" },
-      ]);
-    });
-  }, []);
+  const { data } = useLiveTable<any>("leaders", "display_order");
+  const leaders = data.length > 0 ? data : FALLBACK_LEADERS;
 
   return (
     <section id="leadership" className="py-20 bg-background">

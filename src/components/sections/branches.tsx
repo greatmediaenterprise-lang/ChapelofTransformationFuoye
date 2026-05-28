@@ -1,21 +1,16 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { MapPin, Clock, Phone } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
+import { useLiveTable } from "@/hooks/use-live-table";
+
+const FALLBACK_BRANCHES = [
+  { name: "COT FUOYE — Oye Ekiti (Main Campus)", location: "Phase One, Main Auditorium, Federal University Oye Ekiti", service_time: "Sunday: 8:00 AM - 11:30 AM", phone: "08082513103, 08118361206", is_main: true },
+  { name: "COT FUOYE — Ikole Ekiti Campus", location: "Federal University Oye Ekiti, Ikole Campus", service_time: "Sunday Service", phone: "07041128142", is_main: false },
+];
 
 const Branches = () => {
-  const [branches, setBranches] = useState<any[]>([]);
-
-  useEffect(() => {
-    supabase.from("branches").select("*").order("display_order").then(({ data }) => {
-      if (data && data.length > 0) setBranches(data);
-      else setBranches([
-        { name: "COT FUOYE — Oye Ekiti (Main Campus)", location: "Phase One, Main Auditorium, Federal University Oye Ekiti", service_time: "Sunday: 8:00 AM - 11:30 AM", phone: "08082513103, 08118361206", is_main: true },
-        { name: "COT FUOYE — Ikole Ekiti Campus", location: "Federal University Oye Ekiti, Ikole Campus", service_time: "Sunday Service", phone: "07041128142", is_main: false },
-      ]);
-    });
-  }, []);
+  const { data } = useLiveTable<any>("branches", "display_order");
+  const branches = data.length > 0 ? data : FALLBACK_BRANCHES;
 
   return (
     <section id="branches" className="py-20 bg-background">

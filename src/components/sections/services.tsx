@@ -2,24 +2,19 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar, Clock, MapPin, Users, Play } from "lucide-react";
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
 import { useSiteContent } from "@/hooks/use-site-content";
+import { useLiveTable } from "@/hooks/use-live-table";
+
+const FALLBACK_SERVICES = [
+  { title: "Sunday Service", day: "Every Sunday", time: "8:00 AM - 11:30 AM", description: "Join us for worship" },
+  { title: "Bible Study", day: "Every Wednesday", time: "5:30 PM - 6:30 PM", description: "Deep dive into God's Word" },
+  { title: "Prayer Meeting", day: "Every Friday", time: "5:30 PM - 6:30 PM", description: "Corporate prayer" },
+];
 
 const Services = () => {
-  const [services, setServices] = useState<any[]>([]);
+  const { data } = useLiveTable<any>("service_times", "display_order");
+  const services = data.length > 0 ? data : FALLBACK_SERVICES;
   const { get } = useSiteContent();
-
-  useEffect(() => {
-    supabase.from("service_times").select("*").order("display_order").then(({ data }) => {
-      if (data && data.length > 0) setServices(data);
-      else setServices([
-        { title: "Sunday Service", day: "Every Sunday", time: "8:00 AM - 11:30 AM", description: "Join us for worship" },
-        { title: "Bible Study", day: "Every Wednesday", time: "5:30 PM - 6:30 PM", description: "Deep dive into God's Word" },
-        { title: "Prayer Meeting", day: "Every Friday", time: "5:30 PM - 6:30 PM", description: "Corporate prayer" },
-      ]);
-    });
-  }, []);
 
   const iconMap: Record<number, any> = { 0: Calendar, 1: Clock, 2: Calendar };
   const videoUrl = get("services", "video_url", "https://www.facebook.com/share/v/16jXBxWpMJ/");

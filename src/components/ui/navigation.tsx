@@ -30,7 +30,7 @@ const Navigation = () => {
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
         if (visibleSection) setActiveSection(visibleSection.target.id);
       },
-      { rootMargin: "-5rem 0px -60% 0px", threshold: 0 },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 },
     );
 
     sections.forEach((section) => observer.observe(section));

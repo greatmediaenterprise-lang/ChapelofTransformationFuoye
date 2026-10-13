@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState("home");
 
   const navItems = [
     { name: "Home", href: "#home" },
@@ -17,6 +18,24 @@ const Navigation = () => {
     { name: "Events", href: "#events" },
     { name: "Contact", href: "#contact" },
   ];
+
+  useEffect(() => {
+    const sections = navItems
+      .map((item) => document.getElementById(item.href.slice(1)))
+      .filter((section): section is HTMLElement => section !== null);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visibleSection = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)[0];
+        if (visibleSection) setActiveSection(visibleSection.target.id);
+      },
+      { rootMargin: "-80px 0px -60% 0px", threshold: 0 },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
@@ -43,7 +62,14 @@ const Navigation = () => {
               <a
                 key={item.name}
                 href={item.href}
-                className="text-xs font-medium text-foreground hover:text-primary transition-divine"
+                aria-current={activeSection === item.href.slice(1) ? "location" : undefined}
+                onClick={() => setActiveSection(item.href.slice(1))}
+                className={cn(
+                  "border-b-2 py-2 text-xs font-medium transition-divine",
+                  activeSection === item.href.slice(1)
+                    ? "border-secondary text-primary"
+                    : "border-transparent text-foreground hover:text-primary",
+                )}
               >
                 {item.name}
               </a>
@@ -75,8 +101,17 @@ const Navigation = () => {
                 <a
                   key={item.name}
                   href={item.href}
-                  className="block px-3 py-2 text-base font-medium text-foreground hover:text-primary hover:bg-muted transition-divine"
-                  onClick={() => setIsMenuOpen(false)}
+                  aria-current={activeSection === item.href.slice(1) ? "location" : undefined}
+                  className={cn(
+                    "block border-l-2 px-3 py-2 text-base font-medium transition-divine",
+                    activeSection === item.href.slice(1)
+                      ? "border-secondary bg-muted text-primary"
+                      : "border-transparent text-foreground hover:bg-muted hover:text-primary",
+                  )}
+                  onClick={() => {
+                    setActiveSection(item.href.slice(1));
+                    setIsMenuOpen(false);
+                  }}
                 >
                   {item.name}
                 </a>

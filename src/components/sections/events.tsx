@@ -1,7 +1,8 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { CalendarDays, MapPin, Loader2 } from "lucide-react";
+import { CalendarDays, MapPin } from "lucide-react";
 import { useLiveTable } from "@/hooks/use-live-table";
+import ChapelLoader from "@/components/ui/chapel-loader";
 
 interface Event {
   id: string;
@@ -30,9 +31,7 @@ const Events = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          </div>
+          <ChapelLoader label="Loading events" />
         ) : events.length === 0 ? (
           <div className="text-center py-16">
             <CalendarDays className="h-16 w-16 mx-auto text-muted-foreground/40 mb-4" />

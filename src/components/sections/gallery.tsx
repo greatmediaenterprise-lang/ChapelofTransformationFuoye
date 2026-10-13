@@ -1,9 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Camera, X, Loader2 } from "lucide-react";
+import { Camera, X } from "lucide-react";
 import { useState } from "react";
 import { useLiveTable } from "@/hooks/use-live-table";
+import ChapelLoader from "@/components/ui/chapel-loader";
 
 interface GalleryImage {
   id: string;
@@ -31,9 +32,7 @@ const Gallery = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          </div>
+          <ChapelLoader label="Loading photos" />
         ) : images.length === 0 ? (
           <div className="text-center py-16">
             <Camera className="h-16 w-16 mx-auto text-muted-foreground/40 mb-4" />

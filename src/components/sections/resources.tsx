@@ -1,9 +1,10 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { BookOpen, Cross, Download, FileText, Loader2 } from "lucide-react";
+import { BookOpen, Cross, Download, FileText } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import ChapelLoader from "@/components/ui/chapel-loader";
 
 interface Material {
   id: string;
@@ -69,9 +70,7 @@ const Resources = () => {
         </div>
 
         {loading ? (
-          <div className="text-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
-          </div>
+          <ChapelLoader label="Loading materials" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">
             <FileText className="h-16 w-16 mx-auto text-muted-foreground/40 mb-4" />

@@ -1,0 +1,1 @@
+- Keep reusable content-loading feedback in a shared UI component so sections present consistent loading states.

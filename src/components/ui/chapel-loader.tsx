@@ -8,7 +8,7 @@ interface ChapelLoaderProps {
 }
 
 const ChapelLoader = ({ className, label = "Loading", compact = false }: ChapelLoaderProps) => (
-  <div
+  <span
     className={cn(
       "flex items-center justify-center gap-3 text-muted-foreground",
       compact ? "py-0" : "py-12",
@@ -29,7 +29,7 @@ const ChapelLoader = ({ className, label = "Loading", compact = false }: ChapelL
       <Cross className={cn("text-primary", compact ? "h-2.5 w-2.5" : "h-5 w-5")} strokeWidth={2.4} />
     </span>
     {label && !compact && <span className="text-sm font-medium">{label}</span>}
-  </div>
+  </span>
 );
 
 export default ChapelLoader;

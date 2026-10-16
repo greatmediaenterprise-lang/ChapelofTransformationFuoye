@@ -20,13 +20,13 @@ const ChapelLoader = ({ className, label = "Loading", compact = false }: ChapelL
     <span
       className={cn(
         "relative flex shrink-0 items-center justify-center",
-        compact ? "h-5 w-5" : "h-12 w-12",
+        compact ? "h-4 w-4" : "h-12 w-12",
       )}
       aria-hidden="true"
     >
       <span className="absolute inset-0 animate-[chapel-turn_2.4s_linear_infinite] rounded-full border-2 border-dashed border-secondary" />
       <span className="absolute inset-[4px] animate-[chapel-turn_3.2s_linear_infinite_reverse] rounded-full border border-primary/35" />
-      <Cross className={cn("text-primary", compact ? "h-3 w-3" : "h-5 w-5")} strokeWidth={2.4} />
+      <Cross className={cn("text-primary", compact ? "h-2.5 w-2.5" : "h-5 w-5")} strokeWidth={2.4} />
     </span>
     {label && !compact && <span className="text-sm font-medium">{label}</span>}
   </div>

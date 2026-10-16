@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Loader2, Trash2, LogOut, Image, FileText, CalendarDays, Upload, Users, MapPin, Clock, Link, Settings, Pencil, Plus, Save } from "lucide-react";
+import { Trash2, LogOut, Image, FileText, CalendarDays, Upload, Users, MapPin, Clock, Link, Settings, Pencil, Plus, Save } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ChapelLoader from "@/components/ui/chapel-loader";
 
 type TabKey = "site" | "leadership" | "services" | "gallery" | "materials" | "branches" | "socials" | "events" | "contact";
 
@@ -48,7 +49,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <ChapelLoader label="Preparing the dashboard" />
       </div>
     );
   }
@@ -67,7 +68,7 @@ const AdminDashboard = () => {
               <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required />
               <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} required />
               <Button type="submit" className="w-full" disabled={authLoading}>
-                {authLoading ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : null}Sign In
+                {authLoading ? <ChapelLoader compact label="" className="mr-2" /> : null}Sign In
               </Button>
             </form>
           </CardContent>
@@ -176,7 +177,7 @@ const SiteTextTab = () => {
                       updateItem(item.id, el.value);
                     }}
                   >
-                    {saving === item.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
+                    {saving === item.id ? <ChapelLoader compact label="" /> : <Save className="h-3.5 w-3.5" />}
                   </Button>
                 </div>
               </div>
@@ -246,7 +247,7 @@ const LeadershipTab = () => {
               <Input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
             </div>
             <Button type="submit" disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add Leader
+              {saving ? <ChapelLoader compact label="" className="mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add Leader
             </Button>
           </form>
         </CardContent>
@@ -319,7 +320,7 @@ const ServiceTimesTab = () => {
             </div>
             <Input placeholder="Description (optional)" value={desc} onChange={(e) => setDesc(e.target.value)} />
             <Button type="submit" disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add
+              {saving ? <ChapelLoader compact label="" className="mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add
             </Button>
           </form>
         </CardContent>
@@ -396,7 +397,7 @@ const GalleryTab = () => {
         <CardContent>
           <label htmlFor="admin-gallery-upload">
             <Button asChild variant="default" disabled={uploading} className="cursor-pointer">
-              <span>{uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}{uploading ? "Uploading..." : "Upload Photos (select multiple)"}</span>
+              <span>{uploading ? <ChapelLoader compact label="" className="mr-2" /> : <Upload className="mr-2 h-4 w-4" />}{uploading ? "Uploading..." : "Upload Photos (select multiple)"}</span>
             </Button>
           </label>
           <input id="admin-gallery-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleUpload} disabled={uploading} />
@@ -464,7 +465,7 @@ const MaterialsTab = () => {
           </div>
           <label htmlFor="admin-material-upload">
             <Button asChild variant="default" disabled={uploading} className="cursor-pointer">
-              <span>{uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}{uploading ? "Uploading..." : `Upload ${category} material`}</span>
+              <span>{uploading ? <ChapelLoader compact label="" className="mr-2" /> : <Upload className="mr-2 h-4 w-4" />}{uploading ? "Uploading..." : `Upload ${category} material`}</span>
             </Button>
           </label>
           <input id="admin-material-upload" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.txt,.epub" className="hidden" onChange={handleUpload} disabled={uploading} />
@@ -537,7 +538,7 @@ const BranchesTab = () => {
               <input type="checkbox" checked={isMain} onChange={(e) => setIsMain(e.target.checked)} /> Main campus
             </label>
             <Button type="submit" disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add Branch
+              {saving ? <ChapelLoader compact label="" className="mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add Branch
             </Button>
           </form>
         </CardContent>
@@ -602,7 +603,7 @@ const SocialsTab = () => {
             </div>
             <Input placeholder="Description" value={desc} onChange={(e) => setDesc(e.target.value)} />
             <Button type="submit" disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add Link
+              {saving ? <ChapelLoader compact label="" className="mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Add Link
             </Button>
           </form>
         </CardContent>
@@ -684,7 +685,7 @@ const EventsTab = () => {
               <Input type="file" accept="image/*" onChange={(e) => setImageFile(e.target.files?.[0] || null)} />
             </div>
             <Button type="submit" disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Create Event
+              {saving ? <ChapelLoader compact label="" className="mr-2" /> : <Plus className="h-4 w-4 mr-2" />}Create Event
             </Button>
           </form>
         </CardContent>

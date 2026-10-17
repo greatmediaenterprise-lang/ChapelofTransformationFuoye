@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
@@ -10,23 +10,17 @@ import { supabase } from "@/integrations/supabase/client";
 export const useLiveTable = <T = any>(table: string, orderBy?: string, ascending = true) => {
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
-  const hasLoaded = useRef(false);
 
   const fetchData = useCallback(async () => {
-    const firstLoad = !hasLoaded.current;
-    const startedAt = Date.now();
     try {
       let query: any = (supabase.from as any)(table).select("*");
       if (orderBy) query = query.order(orderBy, { ascending });
       const { data: rows } = await query;
       if (rows) setData(rows as T[]);
+    } catch {
+      // Keep the public page rendered with its existing or fallback content if the request fails.
     } finally {
-      if (firstLoad) {
-        const remaining = Math.max(0, 500 - (Date.now() - startedAt));
-        if (remaining > 0) await new Promise((resolve) => window.setTimeout(resolve, remaining));
-        hasLoaded.current = true;
-        setLoading(false);
-      }
+      setLoading(false);
     }
   }, [table, orderBy, ascending]);
 

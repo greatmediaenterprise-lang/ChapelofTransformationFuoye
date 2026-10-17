@@ -2,7 +2,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Cross, Download, FileText } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import ChapelLoader from "@/components/ui/chapel-loader";
 
@@ -19,20 +19,40 @@ interface Material {
 const Resources = () => {
   const [materials, setMaterials] = useState<Material[]>([]);
   const [loading, setLoading] = useState(true);
+  const [switchingCategory, setSwitchingCategory] = useState(false);
   const [activeTab, setActiveTab] = useState<"academic" | "spiritual">("academic");
+  const switchTimer = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     fetchMaterials();
   }, []);
 
   const fetchMaterials = async () => {
+    const startedAt = Date.now();
     const { data, error } = await supabase
       .from("materials")
       .select("*")
       .order("created_at", { ascending: false });
 
     if (!error && data) setMaterials(data);
+    const remaining = Math.max(0, 500 - (Date.now() - startedAt));
+    if (remaining > 0) await new Promise((resolve) => window.setTimeout(resolve, remaining));
     setLoading(false);
+  };
+
+  useEffect(() => () => {
+    if (switchTimer.current !== undefined) window.clearTimeout(switchTimer.current);
+  }, []);
+
+  const changeCategory = (category: "academic" | "spiritual") => {
+    if (category === activeTab) return;
+    if (switchTimer.current !== undefined) window.clearTimeout(switchTimer.current);
+    setActiveTab(category);
+    setSwitchingCategory(true);
+    switchTimer.current = window.setTimeout(() => {
+      setSwitchingCategory(false);
+      switchTimer.current = undefined;
+    }, 550);
   };
 
   const filtered = materials.filter((m) => m.category === activeTab);
@@ -53,7 +73,7 @@ const Resources = () => {
         <div className="flex justify-center gap-4 mb-8">
           <Button
             variant={activeTab === "academic" ? "default" : "outline"}
-            onClick={() => setActiveTab("academic")}
+            onClick={() => changeCategory("academic")}
             className="gap-2"
           >
             <BookOpen className="h-4 w-4" />
@@ -61,7 +81,7 @@ const Resources = () => {
           </Button>
           <Button
             variant={activeTab === "spiritual" ? "default" : "outline"}
-            onClick={() => setActiveTab("spiritual")}
+            onClick={() => changeCategory("spiritual")}
             className="gap-2"
           >
             <Cross className="h-4 w-4" />
@@ -69,7 +89,7 @@ const Resources = () => {
           </Button>
         </div>
 
-        {loading ? (
+        {loading || switchingCategory ? (
           <ChapelLoader label="Loading materials" />
         ) : filtered.length === 0 ? (
           <div className="text-center py-16">

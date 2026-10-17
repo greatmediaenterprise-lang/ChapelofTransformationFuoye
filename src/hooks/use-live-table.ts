@@ -12,11 +12,16 @@ export const useLiveTable = <T = any>(table: string, orderBy?: string, ascending
   const [loading, setLoading] = useState(true);
 
   const fetchData = useCallback(async () => {
-    let query: any = (supabase.from as any)(table).select("*");
-    if (orderBy) query = query.order(orderBy, { ascending });
-    const { data: rows } = await query;
-    if (rows) setData(rows as T[]);
-    setLoading(false);
+    try {
+      let query: any = (supabase.from as any)(table).select("*");
+      if (orderBy) query = query.order(orderBy, { ascending });
+      const { data: rows } = await query;
+      if (rows) setData(rows as T[]);
+    } catch {
+      // Keep the public page rendered with its existing or fallback content if the request fails.
+    } finally {
+      setLoading(false);
+    }
   }, [table, orderBy, ascending]);
 
   useEffect(() => {

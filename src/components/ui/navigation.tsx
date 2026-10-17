@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import ChapelLoader from "@/components/ui/chapel-loader";
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
+  const [loadingSection, setLoadingSection] = useState<string | null>(null);
+  const navigationTimer = useRef<number | undefined>(undefined);
 
   const navItems = [
     { name: "Home", href: "#home" },
@@ -37,6 +40,20 @@ const Navigation = () => {
     return () => observer.disconnect();
   }, []);
 
+  useEffect(() => () => {
+    if (navigationTimer.current !== undefined) window.clearTimeout(navigationTimer.current);
+  }, []);
+
+  const navigateToSection = (name: string, href: string) => {
+    setActiveSection(href.slice(1));
+    setLoadingSection(name);
+    if (navigationTimer.current !== undefined) window.clearTimeout(navigationTimer.current);
+    navigationTimer.current = window.setTimeout(() => {
+      setLoadingSection(null);
+      navigationTimer.current = undefined;
+    }, 900);
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b">
       <div className="container mx-auto px-4">
@@ -63,7 +80,7 @@ const Navigation = () => {
                 key={item.name}
                 href={item.href}
                 aria-current={activeSection === item.href.slice(1) ? "location" : undefined}
-                onClick={() => setActiveSection(item.href.slice(1))}
+                onClick={() => navigateToSection(item.name, item.href)}
                 className={cn(
                   "border-b-2 py-2 text-xs font-medium transition-divine",
                   activeSection === item.href.slice(1)
@@ -86,12 +103,21 @@ const Navigation = () => {
             <Button
               variant="ghost"
               size="sm"
+              aria-label={isMenuOpen ? "Close navigation menu" : "Open navigation menu"}
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
+
+        {loadingSection && (
+          <div className="pointer-events-none fixed left-1/2 top-[4.5rem] z-[60] -translate-x-1/2" aria-live="polite">
+            <div className="rounded-full border border-border bg-background px-4 py-2 shadow-gentle">
+              <ChapelLoader label={`Opening ${loadingSection}`} className="py-0 text-sm" />
+            </div>
+          </div>
+        )}
 
         {/* Mobile Navigation */}
         {isMenuOpen && (
@@ -109,7 +135,7 @@ const Navigation = () => {
                       : "border-transparent text-foreground hover:bg-muted hover:text-primary",
                   )}
                   onClick={() => {
-                    setActiveSection(item.href.slice(1));
+                    navigateToSection(item.name, item.href);
                     setIsMenuOpen(false);
                   }}
                 >

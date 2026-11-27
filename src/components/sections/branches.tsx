@@ -1,11 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { MapPin, Clock, Phone } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { MapPin, Clock, ExternalLink } from "lucide-react";
 import { useLiveTable } from "@/hooks/use-live-table";
 
 const FALLBACK_BRANCHES = [
-  { name: "COT FUOYE — Oye Ekiti (Main Campus)", location: "Phase One, Main Auditorium, Federal University Oye Ekiti", service_time: "Sunday: 8:00 AM - 11:30 AM", phone: "08082513103, 08118361206", is_main: true },
-  { name: "COT FUOYE — Ikole Ekiti Campus", location: "Federal University Oye Ekiti, Ikole Campus", service_time: "Sunday Service", phone: "07041128142", is_main: false },
+  { name: "COT FUOYE — Oye Ekiti (Main Church)", location: "Chapel of Transformation Oye Campus (FUOYE), Federal University, Oye 371101, Ekiti", service_time: "Sunday: 8:00 AM - 11:30 AM", phone: null, is_main: true },
+  { name: "COT FUOYE — Ikole Ekiti Campus", location: "Federal University Oye Ekiti, Ikole Campus", service_time: "Sunday Service", phone: null, is_main: false },
+  { name: "COT FUOYE — Ayebaju Campus", location: "Federal University Institute of Part-Time Studies, Ayebaju", service_time: "Sunday: 8:00 AM - 11:30 AM", phone: null, is_main: false },
 ];
 
 const Branches = () => {
@@ -34,7 +36,7 @@ const Branches = () => {
               <CardContent className="p-6 md:p-8">
                 <div className="flex items-start gap-2 mb-4">
                   <h3 className="text-xl md:text-2xl font-serif font-bold text-primary">{branch.name}</h3>
-                  {branch.is_main && <Badge variant="secondary" className="text-xs shrink-0">Main</Badge>}
+                  {branch.is_main && <Badge variant="secondary" className="text-xs shrink-0">Main Church</Badge>}
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
@@ -45,11 +47,16 @@ const Branches = () => {
                     <Clock className="h-5 w-5 text-church-gold shrink-0 mt-0.5" />
                     <p className="text-muted-foreground">{branch.service_time}</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <Phone className="h-5 w-5 text-church-gold shrink-0 mt-0.5" />
-                    <p className="text-muted-foreground">{branch.phone}</p>
-                  </div>
                 </div>
+                <Button asChild variant="outline" size="sm" className="mt-5">
+                  <a
+                    href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(`${branch.name}, ${branch.location}, Ekiti`)}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MapPin className="mr-2 h-4 w-4" />View on Google Maps<ExternalLink className="ml-2 h-3.5 w-3.5" />
+                  </a>
+                </Button>
               </CardContent>
             </Card>
           ))}

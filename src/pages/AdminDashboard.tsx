@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { Trash2, LogOut, Image, FileText, CalendarDays, Upload, Users, MapPin, Clock, Link, Settings, Pencil, Plus, Save } from "lucide-react";
+import { Trash2, LogOut, Image, FileText, CalendarDays, Upload, Users, MapPin, Clock, Link, Settings, Pencil, Plus, Save, RefreshCw, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import ChapelLoader from "@/components/ui/chapel-loader";
 
@@ -86,7 +86,7 @@ const AdminDashboard = () => {
     { key: "branches", label: "Branches", icon: MapPin },
     { key: "socials", label: "Socials", icon: Link },
     { key: "events", label: "Events", icon: CalendarDays },
-    { key: "contact", label: "Contact", icon: Settings },
+    { key: "contact", label: "Messages", icon: Mail },
   ];
 
   return (
@@ -709,7 +709,63 @@ const EventsTab = () => {
 
 // ========== CONTACT TAB ==========
 const ContactTab = () => {
-  return <SiteTextTab />;
+  const [submissions, setSubmissions] = useState<any[]>([]);
+  const [loadingMessages, setLoadingMessages] = useState(true);
+  const [loadError, setLoadError] = useState("");
+
+  const fetchSubmissions = async () => {
+    setLoadingMessages(true);
+    setLoadError("");
+    const { data, error } = await supabase.functions.invoke("contact-messages", { body: { action: "list" } });
+    if (error) {
+      setLoadError("Could not load messages. Confirm this account has admin access.");
+      setLoadingMessages(false);
+      return;
+    }
+    setSubmissions(data?.submissions || []);
+    setLoadingMessages(false);
+  };
+
+  useEffect(() => { void fetchSubmissions(); }, []);
+
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-serif font-semibold text-primary">Contact messages</h2>
+          <p className="text-sm text-muted-foreground">Messages are saved here. Email forwarding is not active yet.</p>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => void fetchSubmissions()} disabled={loadingMessages} aria-label="Refresh messages">
+          <RefreshCw className="mr-2 h-4 w-4" />Refresh
+        </Button>
+      </div>
+      {loadError && <p role="alert" className="text-sm text-destructive">{loadError}</p>}
+      {loadingMessages ? (
+        <p className="text-sm text-muted-foreground">Loading messages...</p>
+      ) : submissions.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No messages yet.</p>
+      ) : (
+        <div className="space-y-3">
+          {submissions.map((submission) => (
+            <Card key={submission.id}>
+              <CardContent className="p-4">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="font-semibold">{submission.name}</p>
+                    <a className="text-sm text-primary hover:underline" href={`mailto:${submission.email}`}>{submission.email}</a>
+                  </div>
+                  <time className="text-xs text-muted-foreground" dateTime={submission.created_at}>
+                    {new Date(submission.created_at).toLocaleString()}
+                  </time>
+                </div>
+                <p className="mt-3 whitespace-pre-wrap break-words text-sm text-foreground">{submission.message}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default AdminDashboard;

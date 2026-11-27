@@ -1,1 +1,2 @@
 - Keep reusable content-loading feedback in a shared UI component so sections present consistent loading states.
+- Handle public contact messages in a server-side Edge Function and allow only verified admins to read them, keeping private correspondence out of public access.

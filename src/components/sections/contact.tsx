@@ -3,36 +3,51 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, ExternalLink } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Facebook, Instagram, Youtube, ExternalLink, Send } from "lucide-react";
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { useSiteContent } from "@/hooks/use-site-content";
 import { useLiveTable } from "@/hooks/use-live-table";
+import { supabase } from "@/integrations/supabase/client";
 
 const socialIconMap: Record<string, any> = { Facebook, Instagram, YouTube: Youtube, Linktree: ExternalLink };
 
 const Contact = () => {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [submitting, setSubmitting] = useState(false);
   const { toast } = useToast();
   const { get } = useSiteContent();
   const { data: serviceTimes } = useLiveTable<any>("service_times", "display_order");
   const { data: socials } = useLiveTable<any>("social_links", "display_order");
   const firstService = serviceTimes[0] || null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    toast({ title: "Message Sent!", description: "Thank you for reaching out." });
-    setFormData({ name: "", email: "", message: "" });
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const { error } = await supabase.functions.invoke("contact-messages", {
+        body: { action: "submit", ...formData },
+      });
+      if (error) {
+        toast({ title: "Message could not be sent", description: "Please try again in a moment.", variant: "destructive" });
+        return;
+      }
+      toast({ title: "Message received", description: "Thank you. The church team will review your message." });
+      setFormData({ name: "", email: "", message: "" });
+    } catch {
+      toast({ title: "Message could not be sent", description: "Please try again in a moment.", variant: "destructive" });
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const contactInfo = [
     { icon: MapPin, title: "Location", details: get("contact", "location", "Phase One, Main Auditorium"), subtitle: get("contact", "location_subtitle", "Federal University Oye Ekiti") },
     { icon: Clock, title: "Service Time", details: firstService ? `${firstService.day} ${firstService.time}` : "Sunday 8:00 AM - 11:30 AM", subtitle: firstService?.description || "All are welcome to join" },
-    { icon: Mail, title: "Email", details: get("contact", "email", "info@cotfuoye.org"), subtitle: "Get in touch with us" },
+    { icon: Mail, title: "Email", details: get("contact", "email", "greatenterprise05@gmail.com"), subtitle: "Get in touch with us" },
     { icon: Phone, title: "Phone", details: get("contact", "phone", "08082513103, 08118361206"), subtitle: get("contact", "phone_2", "07041128142") },
   ];
-
-  const whatsapp = get("contact", "whatsapp", "2348118361206");
 
   return (
     <section id="contact" className="py-20 bg-church-light-blue">
@@ -59,7 +74,11 @@ const Contact = () => {
                       </div>
                       <div>
                         <h4 className="text-lg font-serif font-semibold text-primary mb-1">{info.title}</h4>
-                        <p className="text-foreground font-medium">{info.details}</p>
+                        {info.title === "Email" ? (
+                          <a href={`mailto:${info.details}`} className="text-foreground font-medium hover:underline">{info.details}</a>
+                        ) : (
+                          <p className="text-foreground font-medium">{info.details}</p>
+                        )}
                         <p className="text-sm text-muted-foreground">{info.subtitle}</p>
                       </div>
                     </div>
@@ -104,8 +123,8 @@ const Contact = () => {
                     <label htmlFor="message" className="block text-sm font-medium text-foreground mb-2">Message</label>
                     <Textarea id="message" placeholder="How can we help you?" rows={6} value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} required className="transition-divine" />
                   </div>
-                  <Button type="button" size="lg" asChild className="w-full shadow-gentle hover:shadow-divine transition-divine">
-                    <a href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener noreferrer">Send Message via WhatsApp</a>
+                  <Button type="submit" size="lg" disabled={submitting} className="w-full shadow-gentle hover:shadow-divine transition-divine">
+                    <Send className="mr-2 h-4 w-4" />{submitting ? "Sending..." : "Send Message"}
                   </Button>
                 </form>
               </CardContent>
